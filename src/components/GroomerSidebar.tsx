@@ -1,23 +1,23 @@
 
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Star, User, Bell, Plus, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface GroomerSidebarProps {
-  activeSection: string;
-  onSectionChange: (section: string) => void;
-}
-
-export const GroomerSidebar = ({ activeSection, onSectionChange }: GroomerSidebarProps) => {
+export const GroomerSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Calendar },
-    { id: 'bookings', label: 'Bookings', icon: Clock },
-    { id: 'profile', label: 'Profile', icon: User },
-    { id: 'reviews', label: 'Reviews', icon: Star },
-    { id: 'availability', label: 'Availability', icon: Plus },
+    { id: 'dashboard', label: 'Dashboard', icon: Calendar, path: '/dashboard' },
+    { id: 'bookings', label: 'Bookings', icon: Clock, path: '/bookings' },
+    { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
+    { id: 'reviews', label: 'Reviews', icon: Star, path: '/reviews' },
+    { id: 'availability', label: 'Availability', icon: Plus, path: '/availability' },
   ];
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <div className={cn(
@@ -46,10 +46,10 @@ export const GroomerSidebar = ({ activeSection, onSectionChange }: GroomerSideba
           return (
             <button
               key={item.id}
-              onClick={() => onSectionChange(item.id)}
+              onClick={() => navigate(item.path)}
               className={cn(
                 "w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200",
-                activeSection === item.id
+                isActive(item.path)
                   ? "bg-groomer-secondary text-groomer-primary"
                   : "hover:bg-groomer-dark/20 text-white"
               )}
